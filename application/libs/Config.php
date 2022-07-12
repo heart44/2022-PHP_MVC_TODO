@@ -25,4 +25,5 @@
     define("_GET", "GET");
     define("_PUT", "PUT");
     define("_DELETE", "DELETE");
+    define("_RESULT", "result");
     

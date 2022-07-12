@@ -11,26 +11,29 @@ class TodoModel extends Model {
         $stmt->bindValue(':todo', $param["todo"]);
         $stmt->execute();
 
-        return $stmt->rowCount();
+        return intval($this->pdo->lastInsertID());
     }
 
     public function selTodoList() {
         $sql = "SELECT *
                 FROM t_todo
-                ORDER BY itodo";
+                ORDER BY itodo asc";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_OBJ);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function delTodo(&$param) {
-        $sql = "DELETE FROM t_todo
-                WHERE itodo = :itodo";
+        $itodo = $param["itodo"];
+
+        $sql = "DELETE FROM t_todo";    //전체삭제
+        if(!empty($itodo)) {            //부분삭제
+            $sql .= " WHERE itodo = {$itodo}";
+        }
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':itodo', $param["itodo"]);
         $stmt->execute();
 
         return $stmt->rowCount();
